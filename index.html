@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kolab: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows</title>
+<meta name="description" content="Kolab is a dataset of 100+ hours of screen-recorded workflows from 45 professionals in 36 occupations collaborating with AI agents on real, long-horizon problems.">
+<meta property="og:title" content="Kolab: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows">
+<meta property="og:description" content="105 hours of screen-recorded human-agent workflows from 45 professionals, with step-level collaboration and output ratings.">
+<meta property="og:image" content="assets/fig1_overview.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;600;700&family=Castoro&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --fg:#1d2433; --muted:#5b6475; --line:#e3e3e3; --soft:#f5f5f5;
+  --accent:#d8517a; --human:#2f80c9; --ai:#e07a3f;
+  --adopt:#c98a00; --modify:#2f8fd4; --reject:#d8517a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65;font-size:17px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.wide{max-width:1040px}
+header{text-align:center;padding:64px 0 28px;background:#ffffff}
+h1,h2,h3,.btn,.stat b,nav.top{font-family:"Google Sans","Noto Sans",sans-serif}
+h1{font-size:clamp(28px,4.6vw,44px);line-height:1.18;margin:0 0 10px;font-weight:800;letter-spacing:-.02em}
+h1 .k{color:#e0218a}
+h1 .olab{font-size:.78em}
+.subtitle{color:var(--muted);font-size:18px;margin:0 0 26px}
+.authors{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 26px;margin-bottom:14px}
+.author{width:116px;text-align:center}
+.avatar{width:96px;height:96px;border-radius:50%;overflow:hidden;margin:0 auto 8px;background:#eceef2;border:1px solid var(--line)}
+.avatar img,.avatar svg{width:100%;height:100%;object-fit:cover;display:block}
+.avatar svg{padding:14px 12px 0}
+.arole{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:1px 9px}
+.team{margin:6px 0 16px;font-size:15px;color:var(--ink,#1d2433);line-height:1.9}
+.team .tlbl{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:10px}
+.aname{font-size:15px;font-weight:500;line-height:1.3}
+.affil{color:var(--muted);font-size:16px;margin-bottom:24px}
+.affil b{color:var(--fg)}
+.btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:999px;background:#1d2433;color:#fff;font-weight:600;font-size:15px;border:0}
+.btn:hover{background:var(--accent);text-decoration:none}
+.btn.off{background:#9aa3b5;cursor:default}
+.btn.off:hover{background:#9aa3b5;text-decoration:none}
+section{padding:36px 0}
+h2{font-size:28px;margin:0 0 16px;letter-spacing:-.01em;font-weight:700}
+h3{font-size:20px;margin:26px 0 8px;font-weight:700}
+p{margin:0 0 14px}
+.abstract{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:22px 26px}
+.abstract p:last-child{margin:0}
+figure{margin:22px 0;text-align:center}
+figure img{max-width:100%;height:auto;border-radius:10px;background:#fff;padding:8px;border:1px solid var(--line)}
+.comps{max-width:640px;zoom:.65;margin:0 auto;border:1px solid var(--line);border-radius:14px;padding:14px 14px 16px;background:#fff}
+.comps-title{text-align:center;font-family:"Google Sans","Noto Sans",sans-serif;font-size:28px;font-weight:500;margin-bottom:12px}
+.comps-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.cc{border-radius:12px;padding:8px 9px 8px;border:1.5px solid}
+.cc-blue{background:#eaf3fd;border-color:#a9cdf0}.cc-pink{background:#fdeaee;border-color:#f3b0bd}.cc-yellow{background:#fff6e0;border-color:#f2cb74}
+.cc-head{display:flex;align-items:flex-start;gap:7px}
+.cc-n{flex:none;width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;font-family:"Google Sans",sans-serif}
+.cc-blue .cc-n{background:#3b8fe0}.cc-pink .cc-n{background:#ef5b73}.cc-yellow .cc-n{background:#f5b021}
+.cc-t{font-size:15px;line-height:1.22;font-weight:600;color:#1d2b4a;font-family:"Google Sans","Noto Sans",sans-serif}
+.cc-ico svg{display:block;width:100%;height:auto;margin-top:6px}
+.cc-pills{display:flex;gap:4px;margin-top:4px;font-size:12px;font-weight:600;flex-wrap:wrap;justify-content:center}
+.cc-pills span{padding:2px 6px;border-radius:7px}
+.p-adopt{background:#dcf3e4;color:#237a47}.p-modify{background:#fde7bf;color:#9a6200}.p-reject{background:#fbd9de;color:#c43a52}
+.comps-mid{display:flex;align-items:center;justify-content:center;font-size:38px;font-family:"Google Sans",sans-serif}
+.comps-mid .kolab{color:#7a1515}
+@media(max-width:560px){.comps-grid{gap:6px}.cc-t{font-size:9.5px}.comps-title{font-size:17px}.comps-mid{font-size:20px}}
+.release{display:flex;align-items:center;gap:28px;margin:10px 0 16px}
+.release figure{margin:0;flex:none}
+.release ul{margin:0}
+@media(max-width:760px){.release{flex-direction:column}.comps{zoom:.6}}
+.grid3,.grid2{display:grid;gap:12px;align-items:end}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid2{grid-template-columns:repeat(2,1fr)}
+.grid3 div,.grid2 div{text-align:center}
+.grid3 span{display:block;font-size:14px;color:var(--muted);margin-top:6px}
+@media(max-width:700px){.grid3,.grid2{grid-template-columns:1fr}}
+figcaption{color:var(--muted);font-size:15px;margin-top:8px;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:26px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
+.stat b{display:block;font-size:30px;font-weight:800;color:var(--accent);line-height:1.1}
+.stat span{font-size:14px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:18px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff}
+.card h4{margin:0 0 6px;font-size:17px}
+.card p{margin:0;font-size:15.5px;color:#39425a}
+.tag{font-family:"JetBrains Mono",monospace;font-weight:600;font-size:.88em;letter-spacing:.02em}
+.adopt{color:var(--adopt)} .modify{color:var(--modify)} .reject{color:var(--reject)}
+.human{color:var(--human);font-weight:600} .ai{color:var(--ai);font-weight:600}
+.finding{display:flex;gap:16px;margin:0 0 18px}
+.finding .n{flex:none;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.finding p{margin:0}
+.tblwrap{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:7px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--soft);font-weight:600}
+td:first-child,th:first-child{text-align:left}
+tr.base td{color:#8a93a5}
+td.best{background:#e8e8e8;font-weight:700}
+td small{color:#8a93a5;font-size:.82em}
+table.ex td{white-space:normal;text-align:left;font-size:14.5px;vertical-align:top}
+.cap{color:var(--muted);font-size:15px;margin:6px 0 0}
+.hl{background:#f5f5f5;border-left:4px solid var(--accent);padding:14px 18px;border-radius:8px;margin:18px 0}
+ul{padding-left:22px;margin:0 0 14px} li{margin-bottom:6px}
+pre{background:#10151f;color:#e6e9f0;padding:18px 20px;border-radius:12px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.55;position:relative}
+.copy{position:absolute;top:10px;right:10px;background:#2a3346;color:#fff;border:0;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer}
+footer{border-top:1px solid var(--line);padding:28px 0 48px;text-align:center;color:var(--muted);font-size:14.5px}
+nav.top{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:5}
+nav.top .wrap{display:flex;gap:20px;overflow-x:auto;padding-top:11px;padding-bottom:11px;font-size:14.5px;font-weight:500;white-space:nowrap}
+nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoration:none}
+@media(max-width:600px){body{font-size:16px} h2{font-size:24px} header{padding-top:44px}}
+.kolab{color:#e0218a;font-weight:700}
+.kolab .olab{font-size:.8em}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap wide">
+    <h1><span class="k">K<span class="olab">OLAB</span></span>: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows</h1>
+    <p class="subtitle">Real professionals. Real problems. 105 hours of screen-recorded collaboration with AI agents.</p>
+    <div class="authors">
+      <div class="author"><div class="avatar"><img src="assets/authors/shirley.jpg" alt="Shirley Anugrah Hayati"></div><div class="aname"><a href="https://www.shirley.id">Shirley Anugrah Hayati</a></div></div>
+      <div class="author"><div class="avatar"><img src="assets/authors/patricia.jpg" alt="Patricia Anugrah Setiani"></div><div class="aname"><a href="https://patriciasetiani.github.io/">Patricia Anugrah Setiani</a></div></div>
+      <div class="author"><div class="avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#b8bcc4" d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5z"/></svg></div><div class="aname"><a href="https://ether9t.github.io/">Ruizi Wang</a></div></div>
+      <div class="author"><div class="avatar"><img src="assets/authors/zhouyi.jpg" alt="Zhouyi Li"></div><div class="aname">Zhouyi Li</div></div>
+      <div class="author"><div class="avatar"><img src="assets/authors/chi.jpg" alt="Khanh Chi Le"></div><div class="aname"><a href="https://chile2706.github.io/">Khanh Chi Le</a></div></div>
+      <div class="author"><div class="avatar"><img src="assets/authors/youngjun.jpg" alt="Young-Jun Lee"></div><div class="aname"><a href="https://passing2961.github.io/">Young-Jun Lee</a></div></div>
+      <div class="author"><div class="avatar"><img src="assets/authors/dongyeop.jpg" alt="Dongyeop Kang"></div><div class="aname"><a href="https://dykang.github.io/">Dongyeop Kang</a></div></div>
+    </div>
+    <div class="team">
+      <div><span class="tlbl">Annotator team</span>Jingcheng Liang &middot; <a href="https://github.com/owanr/">Risako Owan</a> &middot; Su Yeon Han</div>
+      <div><span class="tlbl">Agent Workflow</span><a href="https://seungyeonlj.github.io/">Seungyeon Jwa</a></div>
+    </div>
+    <div class="affil"><b>Minnesota NLP</b> · University of Minnesota</div>
+    <div class="btns">
+      <!-- TODO: replace href="#" with real links once public -->
+      <a class="btn" href="kolab_paper.pdf" target="_blank" rel="noopener">📄 Paper</a>
+      <a class="btn" href="#" onclick="return false">🤗 Data (TBD)</a>
+      <a class="btn" href="explorer.html">🔍 Explore Data</a>
+      <a class="btn" href="#" onclick="return false">💻 Code (TBD)</a>
+      <a class="btn" href="#bibtex">❝ BibTeX</a>
+    </div>
+  </div>
+</header>
+
+<nav class="top"><div class="wrap wide">
+  <a href="#abstract">Abstract</a><a href="#dataset">Dataset</a><a href="#annotation">Annotations</a><a href="#dynamics">Collaboration dynamics</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#failures">Failure cases</a><a href="#bibtex">BibTeX</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="abstract">
+  <h2>Abstract</h2>
+  <div class="abstract">
+    <p>When humans collaborate with AI agents on long-horizon tasks, what happens to the agents' contributions? For solving long-horizon tasks, humans place greater importance on ongoing interaction with AI agents (<em>e.g.</em>, revising plans) than on an agent's ability to complete the task in a single attempt. However, most agentic benchmarks have focused more on automation. Strong performance on these benchmarks does not mean that an agent can collaborate effectively when deployed in the real world.</p>
+    <p>Professional workflows offer a useful setting for examining this question, as they often involve interdependent steps. To address this gap, we introduce <b><span class="kolab">K<span class="olab">OLAB</span></span></b>, a new dataset of 100+ hours of screen recordings of 45 professionals from 36 occupations collaborating with AI agents on realistic, long-horizon problems. The dataset also contains collaboration and output quality judgments from the participating experts. We evaluate (1) how well agents collaborate with professionals and (2) whether they can serve as verifiers of human-agent collaboration.</p>
+    <p>With <span class="kolab">K<span class="olab">OLAB</span></span>, we find that frontier models, both agentic and non-agentic, tend to overestimate collaboration with experts and struggle to distinguish between high- and low-quality collaboration. As frontier agents cannot yet understand long-horizon collaboration with experts, we position <span class="kolab">K<span class="olab">OLAB</span></span> as a valuable dataset for systematically studying human-agent collaboration grounded in real professional workflows.</p>
+  </div>
+
+  <figure>
+    <img src="assets/fig1_overview.png" alt="Overview of Kolab" style="max-width:640px">
+    <figcaption><b>Overview.</b> <span class="kolab">K<span class="olab">OLAB</span></span> records how professionals (<span class="human">human actions</span>) and agents (<span class="ai">AI actions</span>) jointly solve long-horizon problems, derives metrics to understand collaboration dynamics, and benchmarks whether frontier multimodal LLMs understand this collaboration.</figcaption>
+  </figure>
+
+  <div class="stats">
+    <div class="stat"><b>105 hrs</b><span>screen-recorded video</span></div>
+    <div class="stat"><b>45</b><span>professionals</span></div>
+    <div class="stat"><b>36</b><span>occupations</span></div>
+    <div class="stat"><b>90</b><span>workflow sessions</span></div>
+    <div class="stat"><b>503</b><span>workflow steps</span></div>
+    <div class="stat"><b>90+</b><span>software applications</span></div>
+  </div>
+</section>
+
+<section id="dataset">
+  <h2>The <span class="kolab">K<span class="olab">OLAB</span></span> Dataset</h2>
+  <p>Existing datasets of human-agent work are often not public, rely on predefined tasks constructed by researchers, or focus on a single domain such as software development. <span class="kolab">K<span class="olab">OLAB</span></span> instead captures professionals solving <b>their own</b> real-world problems with an agentic AI (Claude), while using whatever other software and AI tools they normally rely on.</p>
+
+  <h3>Problem criteria</h3>
+  <div class="cards">
+    <div class="card"><h4>🌍 Real-world</h4><p>The problem originates from the professional's actual work, not from an existing workflow dataset.</p></div>
+    <div class="card"><h4>🎓 Domain-specific</h4><p>It requires professional knowledge, skills, or judgment. Routine tasks and generic information seeking were excluded.</p></div>
+    <div class="card"><h4>⏳ Complex &amp; long-horizon</h4><p>At least one hour of work and at least five interdependent steps, each with multiple computer actions.</p></div>
+    <div class="card"><h4>📦 Deliverable-oriented</h4><p>A concrete final deliverable, plus an intermediate output at every step that can be evaluated.</p></div>
+  </div>
+
+  <h3>Workflows as graphs</h3>
+  <p>Each workflow is a temporal graph of semantically meaningful <span class="human">human</span> and <span class="ai">agent</span> actions and their dependencies. In the example below, an architect works through five steps. A task delegated to the agent in Step 2 yields an output that is later <span class="tag modify">MODIFY</span>-ed in Step 3, and the final plan is <span class="tag adopt">ADOPT</span>-ed in Revit, an action that never appears in the chat interface.</p>
+  <figure>
+    <img src="assets/fig2_workflow.png" alt="Example architect workflow graph">
+    <figcaption>An example human-agent collaborative workflow for an architect. Each step is a subgraph of human and agent actions; annotations link a source node, the target AI output it triggers, and the human response to it.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="assets/fig3_domains.png" alt="Domain distribution" style="max-width:460px">
+    <figcaption>Domain distribution of the 45 professionals across 10 sectors, with the software they use. "Other" covers Life &amp; Social Science, Sales, and Healthcare.</figcaption>
+  </figure>
+
+  <h3>What we release</h3>
+  <div class="release">
+  <figure>
+  <div class="comps">
+    <div class="comps-title"><span class="kolab">K<span class="olab">OLAB</span></span> contains 7 components</div>
+    <div class="comps-grid">
+      <div class="cc cc-blue" style="grid-column:1 / span 2"><div class="cc-head"><span class="cc-n">1</span><span class="cc-t">screen-recording video for all sessions</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><rect x="14" y="8" width="92" height="58" rx="6" fill="#2c3a55"/><rect x="19" y="13" width="82" height="48" rx="3" fill="#eef2f8"/><path d="M26 52l10-14 8 6 10-16 10 24z" fill="#cfd8e6"/><circle cx="60" cy="37" r="12" fill="#2f80c9"/><path d="M56 31l11 6-11 6z" fill="#fff"/><rect x="24" y="56" width="50" height="3" rx="1.5" fill="#b7c3d6"/><circle cx="46" cy="57.5" r="3" fill="#fff" stroke="#2f80c9"/><rect x="52" y="66" width="16" height="8" fill="#2c3a55"/><rect x="40" y="74" width="40" height="5" rx="2.5" fill="#2c3a55"/><path d="M112 14l5-5M114 24l7-1M110 5l1-6" stroke="#ef5b4f" stroke-width="2.5" stroke-linecap="round"/></svg></div></div><div class="cc cc-pink" style="grid-column:3 / span 2"><div class="cc-head"><span class="cc-n">2</span><span class="cc-t">workflow document by professionals</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><rect x="34" y="6" width="62" height="74" rx="6" fill="#f7c7cf" transform="rotate(5 60 40)"/><rect x="20" y="8" width="70" height="74" rx="6" fill="#fff" stroke="#e3e7ee"/><circle cx="34" cy="24" r="9" fill="#ef5b4f"/><circle cx="34" cy="24" r="5" fill="#fff"/><circle cx="34" cy="24" r="2" fill="#ef5b4f"/><rect x="48" y="19" width="32" height="4" rx="2" fill="#c3c9d4"/><rect x="48" y="27" width="22" height="4" rx="2" fill="#c3c9d4"/><g fill="#2f80c9"><circle cx="30" cy="44" r="6"/><circle cx="30" cy="58" r="6"/><circle cx="30" cy="72" r="6"/></g><g fill="#fff" font-size="8" font-weight="700" text-anchor="middle" font-family="Arial"><text x="30" y="47">1</text><text x="30" y="61">2</text><text x="30" y="75">3</text></g><g fill="#c3c9d4"><rect x="42" y="42" width="38" height="4" rx="2"/><rect x="42" y="56" width="38" height="4" rx="2"/><rect x="42" y="70" width="38" height="4" rx="2"/></g></svg></div></div><div class="cc cc-yellow" style="grid-column:5 / span 2"><div class="cc-head"><span class="cc-n">3</span><span class="cc-t">human-agent chat log</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><circle cx="20" cy="22" r="15" fill="#cfe3fa"/><rect x="11" y="13" width="18" height="15" rx="6" fill="#2f80c9"/><circle cx="16" cy="20" r="2" fill="#fff"/><circle cx="24" cy="20" r="2" fill="#fff"/><rect x="42" y="6" width="70" height="26" rx="8" fill="#b7d6f5"/><rect x="50" y="13" width="48" height="3.5" rx="1.75" fill="#2f80c9"/><rect x="50" y="21" width="32" height="3.5" rx="1.75" fill="#2f80c9"/><rect x="62" y="34" width="38" height="16" rx="6" fill="#fff" stroke="#dfe5ee"/><path d="M70 45l6-8" stroke="#2f80c9" stroke-width="3" stroke-linecap="round"/><rect x="80" y="39" width="14" height="3" rx="1.5" fill="#c3c9d4"/><circle cx="20" cy="68" r="15" fill="#cfe3fa"/><circle cx="20" cy="63" r="5" fill="#2f80c9"/><path d="M10 78a10 8 0 0 1 20 0z" fill="#2f80c9"/><rect x="42" y="54" width="70" height="26" rx="8" fill="#f8c9c9"/><rect x="50" y="62" width="48" height="3.5" rx="1.75" fill="#b9a3a3"/><rect x="50" y="70" width="32" height="3.5" rx="1.75" fill="#b9a3a3"/><g fill="#2c3a55"><circle cx="58" cy="86" r="2.5"/><circle cx="67" cy="86" r="2.5"/><circle cx="76" cy="86" r="2.5"/></g></svg></div></div>
+      <div class="cc cc-pink" style="grid-column:1 / span 2"><div class="cc-head"><span class="cc-n">7</span><span class="cc-t">input (optional) and output files of each workflow</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><path d="M12 4h22l12 12v28a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4z" fill="#8bbcf0"/><path d="M34 4l12 12H34z" fill="#2f80c9"/><rect x="16" y="26" width="22" height="4" rx="2" fill="#2f80c9"/><rect x="16" y="34" width="22" height="4" rx="2" fill="#2f80c9"/><rect x="62" y="6" width="48" height="42" rx="8" fill="#fff"/><rect x="66" y="10" width="40" height="34" rx="4" fill="#2f80c9"/><circle cx="94" cy="21" r="5" fill="#f5b021"/><path d="M66 44l16-16 12 12 6-5 6 9z" fill="#1d4f8a"/><rect x="8" y="54" width="46" height="34" rx="8" fill="#2fa66a"/><rect x="16" y="62" width="30" height="18" rx="2" fill="#fff"/><path d="M16 71h30M29 62v18" stroke="#2fa66a" stroke-width="2.5"/><rect x="62" y="54" width="48" height="34" rx="8" fill="#ef5b4f"/><path d="M76 78c8-6 12-16 11-22-1-3-4-1-3 4 1 8 10 14 18 13 2-.5 1-3-3-2-8 1-16 4-23 7z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></div></div><div class="comps-mid" style="grid-column:3 / span 2"><span class="kolab">K<span class="olab">OLAB</span></span></div><div class="cc cc-blue" style="grid-column:5 / span 2"><div class="cc-head"><span class="cc-n">4</span><span class="cc-t">human ratings for collaboration experience and output quality</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><rect x="4" y="4" width="112" height="34" rx="6" fill="#fff"/><circle cx="20" cy="21" r="13" fill="#2f80c9"/><circle cx="20" cy="17" r="4.5" fill="#fff"/><path d="M12 30a8 6 0 0 1 16 0z" fill="#fff"/><g fill="#f5b021"><path d="M44 10l2.4 5 5.4.6-4 3.7 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z" transform="translate(0 0)"/><path d="M44 10l2.4 5 5.4.6-4 3.7 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z" transform="translate(16 0)"/><path d="M44 10l2.4 5 5.4.6-4 3.7 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z" transform="translate(32 0)"/><path d="M44 10l2.4 5 5.4.6-4 3.7 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z" transform="translate(48 0)"/></g><path d="M44 10l2.4 5 5.4.6-4 3.7 1.1 5.3-4.9-2.7-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z" transform="translate(64 0)" fill="#c9ced8"/><rect x="38" y="30" width="46" height="3.5" rx="1.75" fill="#c3c9d4"/><g fill="#2f80c9"><rect x="6" y="46" width="11" height="11" rx="2.5"/><rect x="6" y="62" width="11" height="11" rx="2.5"/><rect x="6" y="78" width="11" height="11" rx="2.5"/></g><g fill="#c3c9d4"><rect x="23" y="49" width="40" height="4" rx="2"/><rect x="23" y="65" width="40" height="4" rx="2"/><rect x="23" y="81" width="40" height="4" rx="2"/></g><rect x="72" y="44" width="44" height="46" rx="6" fill="#fff" stroke="#dfe5ee"/><g fill="#2f80c9"><rect x="77" y="49" width="9" height="9" rx="2"/><rect x="77" y="63" width="9" height="9" rx="2"/><rect x="77" y="77" width="9" height="9" rx="2"/></g><g fill="#c3c9d4"><rect x="90" y="51" width="22" height="3.5" rx="1.75"/><rect x="90" y="65" width="22" height="3.5" rx="1.75"/><rect x="90" y="79" width="22" height="3.5" rx="1.75"/></g></svg></div></div>
+      <div class="cc cc-yellow" style="grid-column:2 / span 2"><div class="cc-head"><span class="cc-n">6</span><span class="cc-t">workflow graph per session (with timestamps and labels)</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><g stroke="#51607a" stroke-width="1.8" fill="none"><path d="M30 44l16-12M52 36l14 14M70 52l18-10M60 30c18-2 26 6 22 18" stroke-dasharray="3 3"/></g><g><circle cx="52" cy="22" r="11" fill="#2f80c9" stroke="#fff" stroke-width="2"/><circle cx="52" cy="19" r="3.5" fill="#fff"/><path d="M45 29a7 5 0 0 1 14 0z" fill="#fff"/><circle cx="20" cy="46" r="11" fill="#f5b021" stroke="#e08a00" stroke-width="2"/><path d="M20 40l1.8 4 4.2.4-3.2 2.8 1 4.2-3.8-2.2-3.8 2.2 1-4.2-3.2-2.8 4.2-.4z" fill="#fff"/><circle cx="62" cy="46" r="11" fill="#f5b021" stroke="#e08a00" stroke-width="2"/><path d="M62 40l1.8 4 4.2.4-3.2 2.8 1 4.2-3.8-2.2-3.8 2.2 1-4.2-3.2-2.8 4.2-.4z" fill="#fff"/><circle cx="36" cy="66" r="11" fill="#2f80c9" stroke="#fff" stroke-width="2"/><circle cx="36" cy="63" r="3.5" fill="#fff"/><path d="M29 73a7 5 0 0 1 14 0z" fill="#fff"/><circle cx="84" cy="62" r="11" fill="#2f80c9" stroke="#fff" stroke-width="2"/><circle cx="84" cy="59" r="3.5" fill="#fff"/><path d="M77 69a7 5 0 0 1 14 0z" fill="#fff"/></g><g stroke="#51607a" stroke-width="1.5" fill="none"><circle cx="104" cy="22" r="6"/><circle cx="104" cy="46" r="6"/><circle cx="104" cy="70" r="6"/><path d="M104 18v4l3 2M104 42v4l3 2M104 66v4l3 2"/></g></svg></div><div class="cc-pills"><span class="p-adopt">&#10003; Adopt</span><span class="p-modify">&#9998; Modify</span><span class="p-reject">&#10005; Reject</span></div></div><div class="cc cc-pink" style="grid-column:4 / span 2"><div class="cc-head"><span class="cc-n">5</span><span class="cc-t">step-level output rubrics designed by professionals</span></div><div class="cc-ico"><svg viewBox="0 0 120 90"><rect x="8" y="12" width="52" height="70" rx="6" fill="#fff" stroke="#51607a" stroke-width="3.5"/><rect x="22" y="5" width="24" height="12" rx="5" fill="#ef5b4f"/><circle cx="34" cy="9" r="2.5" fill="#fff"/><g fill="#2f80c9"><rect x="15" y="26" width="10" height="10" rx="2.5"/><rect x="15" y="42" width="10" height="10" rx="2.5"/><rect x="15" y="58" width="10" height="10" rx="2.5"/></g><g fill="#c3c9d4"><rect x="30" y="28" width="22" height="4" rx="2"/><rect x="30" y="44" width="22" height="4" rx="2"/><rect x="30" y="60" width="22" height="4" rx="2"/></g><path d="M80 38c0-10 8-16 18-16s18 6 18 16-8 16-18 16c-3 0-6-.6-8-1.6L80 58z" fill="#fff"/><g fill="#2f80c9"><circle cx="90" cy="38" r="3"/><circle cx="98" cy="38" r="3"/><circle cx="106" cy="38" r="3"/></g></svg></div></div>
+    </div>
+  </div>
+  </figure>
+  <ul>
+    <li>Screen-recording videos for all sessions</li>
+    <li>Workflow documents written by the professionals (goal, context, step names/actions)</li>
+    <li>Human–agent chat logs, including agent tool calls</li>
+    <li>Optional input and output files of each workflow</li>
+    <li>Human ratings of collaboration experience and output quality, with step-level output rubrics written by the professionals</li>
+    <li>Workflow graph per session, with step alignment, timestamps, and adoption labels</li>
+    <li>Post-session survey responses</li>
+  </ul>
+  </div>
+  <p>Collaboration satisfaction was rated 5 in 55.7% of sessions (4 in 28.9%); output quality was rated 5 in 53.6% (4 in 31.2%).</p>
+</section>
+
+<section id="annotation">
+  <h2>How Humans Use Agent Outputs</h2>
+  <p>Two human annotators labeled how the human response to each agent output incorporated that output, including actions that happen <i>outside</i> the chat interface:</p>
+  <div class="cards">
+    <div class="card"><h4 class="adopt">ADOPT · 62.4%</h4><p>The output is incorporated as-is, e.g. directly using an agent-generated design.</p></div>
+    <div class="card"><h4 class="modify">MODIFY · 27.3%</h4><p>The output is used after the human revises it.</p></div>
+    <div class="card"><h4 class="reject">REJECT · 10.3%</h4><p>The output is discarded or met with negative sentiment, and the human proceeds differently.</p></div>
+  </div>
+  <div class="tblwrap">
+  <table class="ex">
+    <tr><th>Response</th><th>Source node action</th><th>Target AI node action</th><th>Current node action</th><th>Software</th></tr>
+    <tr><td class="tag adopt">ADOPT</td><td>Request Afrobeats/techno background music in ElevenLabs</td><td>ElevenLabs generates Afrobeats instrumental candidates</td><td>Capture the ElevenLabs track and import it into the DaVinci Resolve project</td><td>ElevenLabs, DaVinci Resolve</td></tr>
+    <tr><td class="tag modify">MODIFY</td><td>Upload the existing shell plan and request a full room layout</td><td>Claude delivers a dimensioned floor-plan layout for the lobby/storage circulation</td><td>Rebuild walls/partitions in Revit, keeping the liked zoning but fixing lobby/storage circulation</td><td>Revit</td></tr>
+    <tr><td class="tag reject">REJECT</td><td>Ask Kling AI to generate a Zanzibar schoolyard video clip</td><td>Kling AI generates the requested video clip</td><td>Judge the clip's audio unusable and abandon it, out of credits to iterate further</td><td>Kling AI</td></tr>
+  </table>
+  </div>
+  <p>In total, 74 of 90 sessions (82%) have human-curated temporal graphs (avg. 5.6 steps/session, 7.87 nodes/step) and 43 sessions (59.7%) carry adoption labels, yielding <b>298 labeled instances</b> for benchmarking.</p>
+</section>
+
+<section id="dynamics">
+  <h2>Collaboration Dynamics</h2>
+  <p>We characterize collaboration with three metrics: <b>burstiness</b> <i>B</i> of the human–agent interaction rhythm (Goh &amp; Barabási), <b>workflow topology</b> <i>W</i> (the fraction of branch nodes, i.e. how much the human works concurrently while the agent generates), and <b>AI retention</b> <i>R<sub>A</sub></i>, <i>R<sub>M</sub></i> (the share of agent outputs adopted or modified).</p>
+  <figure>
+    <div class="grid3">
+      <div><img src="assets/fig4a.png" alt="Collaboration burstiness"><span>(a) Collaboration burstiness</span></div>
+      <div><img src="assets/fig4b.png" alt="Workflow topology"><span>(b) Workflow topology</span></div>
+      <div><img src="assets/fig4c.png" alt="AI retention rate"><span>(c) AI retention rate</span></div>
+    </div>
+    <figcaption>(a) Burstiness vs. solo lead-in. (b) Workflow branching vs. collaboration rating. (c) Timing of ADOPT, MODIFY, and REJECT responses across sectors.</figcaption>
+  </figure>
+  <div class="finding"><div class="n">1</div><p><b>Burstier workflows reflect more planning before interacting with the agent.</b> Burstiness is consistent within individuals across sessions (ρ = 0.67) and rises with solo lead-in, the share of a step completed before the first AI interaction (ρ = 0.37, p &lt; 0.001).</p></div>
+  <div class="finding"><div class="n">2</div><p><b>Branching workflows are associated with lower perceived collaboration experience</b> (ρ = −0.27, p &lt; 0.05), suggesting concurrent human and agent activity may introduce coordination costs.</p></div>
+  <div class="finding"><div class="n">3</div><p><b>AI retention varies across professional domains.</b> Adoption rates range from 59% in Arts &amp; Sports to 94% in Sciences, while Legal workflows differ markedly, with 8% adoption and 90% modification.</p></div>
+</section>
+
+<section id="benchmark">
+  <h2>Benchmark: Can MLLMs Understand Human-Agent Collaboration?</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>Task</th><th>Observed workflow</th><th>Response visible?</th><th>Prediction</th></tr>
+    <tr><td><b>1a</b> Recognition</td><td>source node → human adoption node</td><td>✓</td><td><span class="tag adopt">ADOPT</span> / <span class="tag modify">MODIFY</span> / <span class="tag reject">REJECT</span></td></tr>
+    <tr><td><b>1b</b> Forecasting</td><td>source node → target AI node</td><td>✗</td><td><span class="tag adopt">ADOPT</span> / <span class="tag modify">MODIFY</span> / <span class="tag reject">REJECT</span></td></tr>
+    <tr><td><b>2a</b> Collaboration satisfaction</td><td>full step</td><td>N/A</td><td>Rating 1–5</td></tr>
+    <tr><td><b>2b</b> Output quality</td><td>full step</td><td>N/A</td><td>Rating 1–5</td></tr>
+  </table>
+  </div>
+  <div class="cards">
+    <div class="card"><h4>RQ1 · AI adoption</h4><p>How well can frontier MLLMs forecast how humans use agent contributions in long-horizon professional workflows?</p></div>
+    <div class="card"><h4>RQ2 · Human rating</h4><p>How well can they predict human ratings of collaboration satisfaction and output quality from the observed workflow?</p></div>
+  </div>
+  <p>We evaluate Gemini 3.1 Pro, Gemini 3.8 Flash, GPT-6 Astra, Claude Opus 5.5, and two open-weight video MLLMs (Qwen3-VL-30B-A3B and Qwen3-VL-32B), against majority-class and mode-rating baselines. Video is the primary input; we also test all seven combinations of video, workflow graph, and chat log.</p>
+</section>
+
+<section id="results">
+  <h2>Results</h2>
+  <div class="hl"><b>Takeaway.</b> Frontier models are poor at both anticipating how professionals use agent outputs and recovering their judgments of collaboration quality. GPT-6 Astra and Gemini 3.1 Pro reach only 0.56 and 0.44 F1 when forecasting adoption, and their rating predictions correlate weakly with professionals (Spearman ρ = 0.33 and 0.06).</div>
+
+  <h3>RQ1 · Recognizing and forecasting AI adoption</h3>
+  <div class="tblwrap">
+  <table>
+    <tr><th></th><th>1a F1</th><th colspan="3">1b Forecasting</th><th colspan="3">1b per-label F1</th></tr>
+    <tr><th>Model</th><th>F1</th><th>P</th><th>R</th><th>F1</th><th class="adopt">Adopt</th><th class="modify">Modify</th><th class="reject">Reject</th></tr>
+    <tr class="base"><td>Majority-class</td><td>0.249</td><td>0.199</td><td>0.333</td><td>0.249</td><td>0.747</td><td>0.000</td><td>0.000</td></tr>
+    <tr><td>Gemini 3.1 Pro</td><td class="best">0.756<small>±0.017</small></td><td>0.529<small>±0.079</small></td><td>0.434<small>±0.020</small></td><td>0.437<small>±0.028</small></td><td>0.696<small>±0.020</small></td><td>0.447<small>±0.003</small></td><td>0.168<small>±0.069</small></td></tr>
+    <tr><td>Gemini 3.8 Flash</td><td>0.662<small>±0.010</small></td><td>0.491<small>±0.031</small></td><td>0.418<small>±0.012</small></td><td>0.420<small>±0.014</small></td><td class="best">0.734<small>±0.008</small></td><td>0.317<small>±0.014</small></td><td>0.208<small>±0.023</small></td></tr>
+    <tr><td>GPT-6 Astra</td><td>0.748</td><td class="best">0.580<small>±0.027</small></td><td class="best">0.558<small>±0.028</small></td><td class="best">0.558<small>±0.023</small></td><td>0.710<small>±0.026</small></td><td class="best">0.577<small>±0.043</small></td><td class="best">0.387<small>±0.054</small></td></tr>
+    <tr><td>Claude Opus 5.5</td><td>0.672</td><td>0.635</td><td>0.544</td><td>0.562</td><td>0.750</td><td>0.542</td><td>0.392</td></tr>
+    <tr><td>Qwen3-VL-30B-A3B</td><td>0.596<small>±0.010</small></td><td>0.405<small>±0.014</small></td><td>0.412<small>±0.024</small></td><td>0.394<small>±0.022</small></td><td>0.544<small>±0.029</small></td><td>0.359<small>±0.029</small></td><td>0.278<small>±0.019</small></td></tr>
+    <tr><td>Qwen3-VL-32B</td><td>0.432<small>±0.033</small></td><td>0.441<small>±0.042</small></td><td>0.382<small>±0.016</small></td><td>0.245<small>±0.012</small></td><td>0.064<small>±0.033</small></td><td>0.447<small>±0.010</small></td><td>0.225<small>±0.022</small></td></tr>
+  </table>
+  </div>
+  <p class="cap">Video-only input, mean ± std over 3 runs. Shaded = best excluding Claude (the agent used in data collection, which may be biased toward its own interface).</p>
+
+  <h3>RQ2 · Predicting collaboration satisfaction and output quality</h3>
+  <div class="tblwrap">
+  <table>
+    <tr><th></th><th colspan="3">2a Collaboration</th><th colspan="3">2b Output quality</th></tr>
+    <tr><th>Model</th><th>MAE ↓</th><th>Within-1 ↑</th><th>Spearman ρ ↑</th><th>MAE ↓</th><th>Within-1 ↑</th><th>Spearman ρ ↑</th></tr>
+    <tr class="base"><td>Mode baseline</td><td>0.679</td><td>0.847</td><td>–</td><td>0.725</td><td>0.836</td><td>–</td></tr>
+    <tr><td>Gemini 3.1 Pro</td><td class="best">0.697</td><td class="best">0.843</td><td>0.060</td><td class="best">0.767</td><td class="best">0.821</td><td>0.006</td></tr>
+    <tr><td>Gemini 3.8 Flash</td><td>0.798</td><td>0.816</td><td>0.037</td><td>0.817</td><td>0.808</td><td>−0.006</td></tr>
+    <tr><td>GPT-6 Astra</td><td>0.960</td><td>0.836</td><td class="best">0.332</td><td>0.938</td><td>0.779</td><td class="best">0.299</td></tr>
+    <tr><td>Qwen3-VL-30B-A3B</td><td>0.912</td><td>0.808</td><td>0.079</td><td>1.239</td><td>0.656</td><td>−0.015</td></tr>
+    <tr><td>Qwen3-VL-32B</td><td>1.266</td><td>0.609</td><td>0.082</td><td>1.341</td><td>0.563</td><td>0.101</td></tr>
+  </table>
+  </div>
+  <p class="cap">Averaged over 3 runs. Because human ratings skew heavily toward 5, the trivial mode baseline beats every MLLM on MAE.</p>
+
+  <h3>Which modality helps?</h3>
+  <p>No single modality wins everywhere. Video gives the best recognition (Gemini 3.1 Pro, F1 = 0.76) and forecasting (GPT-6 Astra, F1 = 0.56). Chat alone hurts <span class="tag reject">REJECT</span> cases (−0.17 F1 vs. video), likely because rejections happen outside the chat. Human-curated workflow graphs help the non-agentic Qwen models most: for Qwen-32B they lift forecasting F1 from 0.24 to 0.42, and for output quality they raise Gemini Flash and Qwen-30B from ρ ≈ 0 to 0.26–0.30.</p>
+  <figure>
+    <img src="assets/fig5_modalities.png" alt="Seven input modality combinations">
+    <figcaption>Results for seven input-modality combinations (V = video, G = graph, C = chat log; "+" combines them).</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/fig6_modality_effects.png" alt="How each modality helps">
+    <figcaption>(a) Video alone misses low ratings. (b) Chat alone misses rejections. (c) Graphs help most where video fails (r = −0.84).</figcaption>
+  </figure>
+</section>
+
+<section id="failures">
+  <h2>Failure Cases</h2>
+  <p><b>Models favor particular labels.</b> Gemini 3.1 Pro and Flash consistently over-predict <span class="tag adopt">ADOPT</span>: with video, Gemini Flash predicts it for 79.2% of examples against a 62.0% ground-truth rate. Qwen3-VL-32B instead predicts <span class="tag modify">MODIFY</span> for 91.5% of cases (28.1% in the ground truth).</p>
+  <figure>
+    <div class="grid2">
+      <div><img src="assets/fig7a_reject.png" alt="True-reject cases"></div>
+      <div><img src="assets/fig7b_modify.png" alt="True-modify cases"></div>
+    </div>
+    <figcaption>Prediction distributions for true REJECT (left) and true MODIFY (right) cases in adoption forecasting.</figcaption>
+  </figure>
+  <p><b>Models give near-constant ratings.</b> With video, Gemini 3.1 Pro predicts 4.83 for a true rating of 1 and 4.95 for a true 5 in Task 2a. Adding the graph widens the gap between true ratings of 1 and 5 to 1.96 and 2.49 for Tasks 2a and 2b; GPT-6 and Claude already separate low and high ratings with video (gaps of 0.74–1.23).</p>
+  <div class="hl">These systematic biases raise a deeper question: are MLLMs actually grounding their predictions in the observed workflow? Repeating similar labels and ratings across different inputs suggests predictions may be driven by model-specific priors rather than the workflow itself.</div>
+</section>
+
+<section id="conclusion">
+  <h2>Conclusion</h2>
+  <p><span class="kolab">K<span class="olab">OLAB</span></span> benchmarks frontier multimodal agentic models on their ability to support human-agent collaboration in long-horizon workflows. Even frontier MLLMs, including GPT-6, struggle to predict and understand human–AI collaboration. In future work, we will explore constructing training datasets and sandbox environments where models can practice collaborating with simulated users before real-world deployment.</p>
+</section>
+
+<section id="bibtex">
+  <h2>BibTeX</h2>
+  <pre id="bib"><button class="copy" onclick="navigator.clipboard.writeText(document.getElementById('bibtext').innerText);this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button><code id="bibtext">@misc{hayati2026kolab,
+  title   = {Kolab: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows},
+  author  = {Hayati, Shirley Anugrah and Setiani, Patricia Anugrah and Wang, Ruizi and Li, Zhouyi and Le, Khanh Chi and Lee, Young-Jun and Kang, Dongyeop},
+  year    = {2026}
+}</code></pre>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">© 2026 <a href="https://minnesotanlp.github.io/">Minnesota NLP</a> · University of Minnesota</div>
+</footer>
+</body>
+</html>
