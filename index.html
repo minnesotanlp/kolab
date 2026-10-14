@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kolab: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows</title>
-<meta name="description" content="Kolab is a dataset of 100+ hours of screen-recorded workflows from 45 professionals in 36 occupations collaborating with AI agents on real, long-horizon problems.">
+<meta name="description" content="Kolab is a dataset of 115+ hours of screen-recorded workflows from 50 professionals in 40 occupations collaborating with AI agents on real, long-horizon problems.">
 <meta property="og:title" content="Kolab: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows">
-<meta property="og:description" content="105 hours of screen-recorded human-agent workflows from 45 professionals, with step-level collaboration and output ratings.">
+<meta property="og:description" content="115+ hours of screen-recorded human-agent workflows from 50 professionals, with step-level collaboration and output ratings.">
 <meta property="og:image" content="assets/fig1_overview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;600;700&family=Castoro&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -86,6 +86,8 @@ figcaption{color:var(--muted);font-size:15px;margin-top:8px;text-align:left}
 .stat span{font-size:14px;color:var(--muted)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:18px 0}
 .card{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff}
+.criteria{list-style:disc;padding-left:26px;margin:12px 0 18px}
+.criteria li{padding:4px 0}
 .card h4{margin:0 0 6px;font-size:17px}
 .card p{margin:0;font-size:15.5px;color:#39425a}
 .tag{font-family:"JetBrains Mono",monospace;font-weight:600;font-size:.88em;letter-spacing:.02em}
@@ -115,6 +117,24 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
 @media(max-width:600px){body{font-size:16px} h2{font-size:24px} header{padding-top:44px}}
 .kolab{color:#e0218a;font-weight:700}
 .kolab .olab{font-size:.8em}
+
+/* --- interactive bias charts (Failure Cases) --- */
+.viz{border:1px solid var(--line);border-radius:14px;padding:16px 18px 14px;margin:20px 0;background:#fff}
+.viz h4{margin:0 0 4px;font-family:"Google Sans","Noto Sans",sans-serif;font-size:17px}
+.viz .sub{color:var(--muted);font-size:14.5px;margin:0 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:0 8px 8px 0;background:var(--soft)}
+.seg button{border:0;background:transparent;padding:5px 14px;font:inherit;font-size:14px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--fg);color:#fff}
+.viz svg{width:100%;height:auto;display:block}
+.viz .note{font-size:15px;margin:8px 0 0}
+.vz-flex{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.vz-flex>div{flex:1 1 300px;min-width:0}
+.vz-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);margin:2px 0 6px}
+.vz-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid rgba(0,0,0,.25)}
+.viz table{font-size:14px}
+#ratings-tbl{overflow-x:auto}
+.viz td,.viz th{padding:6px 8px}
+.viz td.neg{color:#c43a52;font-weight:600}.viz td.pos{color:#237a47;font-weight:600}
 </style>
 </head>
 <body>
@@ -122,7 +142,7 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
 <header>
   <div class="wrap wide">
     <h1><span class="k">K<span class="olab">OLAB</span></span>: Benchmarking Human-Agent Collaboration in Long-Horizon Workflows</h1>
-    <p class="subtitle">Real professionals. Real problems. 105 hours of screen-recorded collaboration with AI agents.</p>
+    <p class="subtitle">Real professionals. Real problems. 115+ hours of screen-recorded collaboration with AI agents.</p>
     <div class="authors">
       <div class="author"><div class="avatar"><img src="assets/authors/shirley.jpg" alt="Shirley Anugrah Hayati"></div><div class="aname"><a href="https://www.shirley.id">Shirley Anugrah<br>Hayati</a></div></div>
       <div class="author"><div class="avatar"><img src="assets/authors/patricia.jpg" alt="Patricia Anugrah Setiani"></div><div class="aname"><a href="https://patriciasetiani.github.io/">Patricia Anugrah<br>Setiani</a></div></div>
@@ -134,9 +154,8 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
     </div>
     <div class="team">
       <div><span class="tlbl">Annotator team</span>Jingcheng Liang &middot; <a href="https://github.com/owanr/">Risako Owan</a> &middot; Su Yeon Han</div>
-      <div><span class="tlbl">Agent Workflow</span><a href="https://seungyeonlj.github.io/">Seungyeon Jwa</a></div>
     </div>
-    <div class="affil"><b>Minnesota NLP</b> · University of Minnesota</div>
+    <div class="affil"><b><a href="https://minnesotanlp.github.io/">Minnesota NLP</a></b> · University of Minnesota</div>
     <div class="btns">
       <!-- TODO: replace href="#" with real links once public -->
       <a class="btn" href="kolab_paper.pdf" target="_blank" rel="noopener">📄 Paper</a>
@@ -158,8 +177,8 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
   <h2>Abstract</h2>
   <div class="abstract">
     <p>When humans collaborate with AI agents on long-horizon tasks, what happens to the agents' contributions? For solving long-horizon tasks, humans place greater importance on ongoing interaction with AI agents (<em>e.g.</em>, revising plans) than on an agent's ability to complete the task in a single attempt. However, most agentic benchmarks have focused more on automation. Strong performance on these benchmarks does not mean that an agent can collaborate effectively when deployed in the real world.</p>
-    <p>Professional workflows offer a useful setting for examining this question, as they often involve interdependent steps. To address this gap, we introduce <b><span class="kolab">K<span class="olab">OLAB</span></span></b>, a new dataset of 100+ hours of screen recordings of 45 professionals from 36 occupations collaborating with AI agents on realistic, long-horizon problems. The dataset also contains collaboration and output quality judgments from the participating experts. We evaluate (1) how well agents collaborate with professionals and (2) whether they can serve as verifiers of human-agent collaboration.</p>
-    <p>With <span class="kolab">K<span class="olab">OLAB</span></span>, we find that frontier models, both agentic and non-agentic, tend to overestimate collaboration with experts and struggle to distinguish between high- and low-quality collaboration. As frontier agents cannot yet understand long-horizon collaboration with experts, we position <span class="kolab">K<span class="olab">OLAB</span></span> as a valuable dataset for systematically studying human-agent collaboration grounded in real professional workflows.</p>
+    <p>Professional workflows offer a useful setting for examining this question, as they often involve interdependent steps. To address this gap, we introduce <b><span class="kolab">K<span class="olab">OLAB</span></span></b>, a new dataset of 115+ hours of screen recordings of 50 professionals from 40 occupations collaborating with AI agents on realistic, long-horizon problems. The dataset also contains collaboration and output quality judgments from the participating experts. We evaluate (1) how well agents collaborate with professionals and (2) whether they can serve as verifiers of human–agent collaboration.</p>
+    <p>With <span class="kolab">K<span class="olab">OLAB</span></span>, we find that frontier models, both agentic and non-agentic, tend to overestimate collaboration with experts and struggle to distinguish between high- and low-quality collaboration. As frontier agents cannot yet understand long-horizon collaboration with experts, we position <span class="kolab">K<span class="olab">OLAB</span></span> as a valuable dataset for systematically studying human–agent collaboration grounded in real professional workflows.</p>
   </div>
 
   <figure>
@@ -168,11 +187,11 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
   </figure>
 
   <div class="stats">
-    <div class="stat"><b>105 hrs</b><span>screen-recorded video</span></div>
-    <div class="stat"><b>45</b><span>professionals</span></div>
-    <div class="stat"><b>36</b><span>occupations</span></div>
-    <div class="stat"><b>90</b><span>workflow sessions</span></div>
-    <div class="stat"><b>503</b><span>workflow steps</span></div>
+    <div class="stat"><b>115+ hrs</b><span>screen-recorded video</span></div>
+    <div class="stat"><b>50</b><span>professionals</span></div>
+    <div class="stat"><b>40</b><span>occupations</span></div>
+    <div class="stat"><b>100</b><span>workflow sessions</span></div>
+    <div class="stat"><b>508</b><span>workflow steps</span></div>
     <div class="stat"><b>90+</b><span>software applications</span></div>
   </div>
 </section>
@@ -182,12 +201,12 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
   <p>Existing datasets of human-agent work are often not public, rely on predefined tasks constructed by researchers, or focus on a single domain such as software development. <span class="kolab">K<span class="olab">OLAB</span></span> instead captures professionals solving <b>their own</b> real-world problems with an agentic AI (Claude), while using whatever other software and AI tools they normally rely on.</p>
 
   <h3>Problem criteria</h3>
-  <div class="cards">
-    <div class="card"><h4>🌍 Real-world</h4><p>The problem originates from the professional's actual work, not from an existing workflow dataset.</p></div>
-    <div class="card"><h4>🎓 Domain-specific</h4><p>It requires professional knowledge, skills, or judgment. Routine tasks and generic information seeking were excluded.</p></div>
-    <div class="card"><h4>⏳ Complex &amp; long-horizon</h4><p>At least one hour of work and at least five interdependent steps, each with multiple computer actions.</p></div>
-    <div class="card"><h4>📦 Deliverable-oriented</h4><p>A concrete final deliverable, plus an intermediate output at every step that can be evaluated.</p></div>
-  </div>
+  <ul class="criteria">
+    <li><b>🌍 Real-world:</b> The problem originates from the professional's actual work, not from an existing workflow dataset.</li>
+    <li><b>🎓 Domain-specific:</b> It requires professional knowledge, skills, or judgment. Routine tasks and generic information seeking were excluded.</li>
+    <li><b>⏳ Complex &amp; long-horizon:</b> At least one hour of work and at least five interdependent steps, each with multiple computer actions.</li>
+    <li><b>📦 Deliverable-oriented:</b> A concrete final deliverable, plus an intermediate output at every step that can be evaluated.</li>
+  </ul>
 
   <h3>Workflows as graphs</h3>
   <p>Each workflow is a temporal graph of semantically meaningful <span class="human">human</span> and <span class="ai">agent</span> actions and their dependencies. In the example below, an architect works through five steps. A task delegated to the agent in Step 2 yields an output that is later <span class="tag modify">MODIFY</span>-ed in Step 3, and the final plan is <span class="tag adopt">ADOPT</span>-ed in Revit, an action that never appears in the chat interface.</p>
@@ -197,8 +216,8 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
   </figure>
 
   <figure>
-    <img src="assets/fig3_domains.png" alt="Domain distribution" style="max-width:460px">
-    <figcaption>Domain distribution of the 45 professionals across 10 sectors, with the software they use. "Other" covers Life &amp; Social Science, Sales, and Healthcare.</figcaption>
+    <img src="assets/fig3_domains.png?v=2" alt="Domain distribution" style="max-width:460px">
+    <figcaption>Domain distribution of the 50 professionals across 10 sectors, with the software they use. "Other" covers Life &amp; Social Science, Sales, and Healthcare.</figcaption>
   </figure>
 
   <h3>What we release</h3>
@@ -223,16 +242,15 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
     <li>Post-session survey responses</li>
   </ul>
   </div>
-  <p>Collaboration satisfaction was rated 5 in 55.7% of sessions (4 in 28.9%); output quality was rated 5 in 53.6% (4 in 31.2%).</p>
 </section>
 
 <section id="annotation">
   <h2>How Humans Use Agent Outputs</h2>
   <p>Two human annotators labeled how the human response to each agent output incorporated that output, including actions that happen <i>outside</i> the chat interface:</p>
   <div class="cards">
-    <div class="card"><h4 class="adopt">ADOPT · 62.4%</h4><p>The output is incorporated as-is, e.g. directly using an agent-generated design.</p></div>
-    <div class="card"><h4 class="modify">MODIFY · 27.3%</h4><p>The output is used after the human revises it.</p></div>
-    <div class="card"><h4 class="reject">REJECT · 10.3%</h4><p>The output is discarded or met with negative sentiment, and the human proceeds differently.</p></div>
+    <div class="card"><h4 class="adopt">ADOPT · 65.9%</h4><p>The output is incorporated as-is, e.g. directly using an agent-generated design.</p></div>
+    <div class="card"><h4 class="modify">MODIFY · 19.1%</h4><p>The output is used after the human revises it.</p></div>
+    <div class="card"><h4 class="reject">REJECT · 15.0%</h4><p>The output is discarded or met with negative sentiment, and the human proceeds differently.</p></div>
   </div>
   <div class="tblwrap">
   <table class="ex">
@@ -242,7 +260,7 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
     <tr><td class="tag reject">REJECT</td><td>Ask Kling AI to generate a Zanzibar schoolyard video clip</td><td>Kling AI generates the requested video clip</td><td>Judge the clip's audio unusable and abandon it, out of credits to iterate further</td><td>Kling AI</td></tr>
   </table>
   </div>
-  <p>In total, 74 of 90 sessions (82%) have human-curated temporal graphs (avg. 5.6 steps/session, 7.87 nodes/step) and 43 sessions (59.7%) carry adoption labels, yielding <b>298 labeled instances</b> for benchmarking.</p>
+  <p>In total, all 100 sessions (50 professionals) have human-curated temporal graphs (avg. 5.2 steps/session, 8.7 nodes/step) and adoption labels, yielding <b>692 labeled instances</b> for benchmarking.</p>
 </section>
 
 <section id="dynamics">
@@ -250,15 +268,15 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
   <p>We characterize collaboration with three metrics: <b>burstiness</b> <i>B</i> of the human–agent interaction rhythm (Goh &amp; Barabási), <b>workflow topology</b> <i>W</i> (the fraction of branch nodes, i.e. how much the human works concurrently while the agent generates), and <b>AI retention</b> <i>R<sub>A</sub></i>, <i>R<sub>M</sub></i> (the share of agent outputs adopted or modified).</p>
   <figure>
     <div class="grid3">
-      <div><img src="assets/fig4a.png" alt="Collaboration burstiness"><span>(a) Collaboration burstiness</span></div>
-      <div><img src="assets/fig4b.png" alt="Workflow topology"><span>(b) Workflow topology</span></div>
-      <div><img src="assets/fig4c.png" alt="AI retention rate"><span>(c) AI retention rate</span></div>
+      <div><img src="assets/fig4a.png?v=2" alt="Collaboration burstiness"><span>(a) Collaboration burstiness</span></div>
+      <div><img src="assets/fig4b.png?v=2" alt="Workflow topology"><span>(b) Workflow topology</span></div>
+      <div><img src="assets/fig4c.png?v=2" alt="AI retention rate"><span>(c) AI retention rate</span></div>
     </div>
     <figcaption>(a) Burstiness vs. solo lead-in. (b) Workflow branching vs. collaboration rating. (c) Timing of ADOPT, MODIFY, and REJECT responses across sectors.</figcaption>
   </figure>
-  <div class="finding"><div class="n">1</div><p><b>Burstier workflows reflect more planning before interacting with the agent.</b> Burstiness is consistent within individuals across sessions (ρ = 0.67) and rises with solo lead-in, the share of a step completed before the first AI interaction (ρ = 0.37, p &lt; 0.001).</p></div>
-  <div class="finding"><div class="n">2</div><p><b>Branching workflows are associated with lower perceived collaboration experience</b> (ρ = −0.27, p &lt; 0.05), suggesting concurrent human and agent activity may introduce coordination costs.</p></div>
-  <div class="finding"><div class="n">3</div><p><b>AI retention varies across professional domains.</b> Adoption rates range from 59% in Arts &amp; Sports to 94% in Sciences, while Legal workflows differ markedly, with 8% adoption and 90% modification.</p></div>
+  <div class="finding"><div class="n">1</div><p><b>Burstier workflows reflect more planning before interacting with the agent.</b> Burstiness is consistent within individuals across sessions (ρ = 0.59) and rises with solo lead-in, the share of a step completed before the first AI interaction (ρ = 0.35, p &lt; 0.001).</p></div>
+  <div class="finding"><div class="n">2</div><p><b>Branching workflows are associated with lower perceived collaboration experience</b> (ρ = −0.24, p &lt; 0.05), suggesting concurrent human and agent activity may introduce coordination costs.</p></div>
+  <div class="finding"><div class="n">3</div><p><b>AI retention varies across professional domains.</b> Adoption rates range from 57% in Legal to 79% in Sciences, while Legal workflows stand out for modification (41%, about twice the next-highest domain).</p></div>
 </section>
 
 <section id="benchmark">
@@ -268,6 +286,8 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
     <tr><th>Task</th><th>Observed workflow</th><th>Response visible?</th><th>Prediction</th></tr>
     <tr><td><b>1a</b> Recognition</td><td>source node → human adoption node</td><td>✓</td><td><span class="tag adopt">ADOPT</span> / <span class="tag modify">MODIFY</span> / <span class="tag reject">REJECT</span></td></tr>
     <tr><td><b>1b</b> Forecasting</td><td>source node → target AI node</td><td>✗</td><td><span class="tag adopt">ADOPT</span> / <span class="tag modify">MODIFY</span> / <span class="tag reject">REJECT</span></td></tr>
+    <tr><td><b>1c</b> Step-N forecasting</td><td>preceding 1–3 steps → target AI node</td><td>✗</td><td><span class="tag adopt">ADOPT</span> / <span class="tag modify">MODIFY</span> / <span class="tag reject">REJECT</span></td></tr>
+    <tr><td><b>1d</b> Workflow-level forecasting</td><td>entire workflow → target AI node</td><td>✗</td><td><span class="tag adopt">ADOPT</span> / <span class="tag modify">MODIFY</span> / <span class="tag reject">REJECT</span></td></tr>
     <tr><td><b>2a</b> Collaboration satisfaction</td><td>full step</td><td>N/A</td><td>Rating 1–5</td></tr>
     <tr><td><b>2b</b> Output quality</td><td>full step</td><td>N/A</td><td>Rating 1–5</td></tr>
   </table>
@@ -281,62 +301,103 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
 
 <section id="results">
   <h2>Results</h2>
-  <div class="hl"><b>Takeaway.</b> Frontier models are poor at both anticipating how professionals use agent outputs and recovering their judgments of collaboration quality. GPT-6 Astra and Gemini 3.1 Pro reach only 0.56 and 0.44 F1 when forecasting adoption, and their rating predictions correlate weakly with professionals (Spearman ρ = 0.33 and 0.06).</div>
+  <div class="hl"><b>Takeaway.</b> Frontier models are poor at both anticipating how professionals use agent outputs and recovering their judgments of collaboration quality. GPT-6 Astra and Gemini 3.1 Pro reach only 0.51 and 0.39 F1 when forecasting adoption, and their rating predictions correlate weakly with professionals (Spearman ρ = 0.38 and 0.08).</div>
 
   <h3>RQ1 · Recognizing and forecasting AI adoption</h3>
   <div class="tblwrap">
   <table>
     <tr><th></th><th>1a F1</th><th colspan="3">1b Forecasting</th><th colspan="3">1b per-label F1</th></tr>
     <tr><th>Model</th><th>F1</th><th>P</th><th>R</th><th>F1</th><th class="adopt">Adopt</th><th class="modify">Modify</th><th class="reject">Reject</th></tr>
-    <tr class="base"><td>Majority-class</td><td>0.249</td><td>0.199</td><td>0.333</td><td>0.249</td><td>0.747</td><td>0.000</td><td>0.000</td></tr>
-    <tr><td>Gemini 3.1 Pro</td><td class="best">0.756<small>±0.017</small></td><td>0.529<small>±0.079</small></td><td>0.434<small>±0.020</small></td><td>0.437<small>±0.028</small></td><td>0.696<small>±0.020</small></td><td>0.447<small>±0.003</small></td><td>0.168<small>±0.069</small></td></tr>
-    <tr><td>Gemini 3.8 Flash</td><td>0.662<small>±0.010</small></td><td>0.491<small>±0.031</small></td><td>0.418<small>±0.012</small></td><td>0.420<small>±0.014</small></td><td class="best">0.734<small>±0.008</small></td><td>0.317<small>±0.014</small></td><td>0.208<small>±0.023</small></td></tr>
-    <tr><td>GPT-6 Astra</td><td>0.748</td><td class="best">0.580<small>±0.027</small></td><td class="best">0.558<small>±0.028</small></td><td class="best">0.558<small>±0.023</small></td><td>0.710<small>±0.026</small></td><td class="best">0.577<small>±0.043</small></td><td class="best">0.387<small>±0.054</small></td></tr>
-    <tr><td>Claude Opus 5.5</td><td>0.672</td><td>0.635</td><td>0.544</td><td>0.562</td><td>0.750</td><td>0.542</td><td>0.392</td></tr>
-    <tr><td>Qwen3-VL-30B-A3B</td><td>0.596<small>±0.010</small></td><td>0.405<small>±0.014</small></td><td>0.412<small>±0.024</small></td><td>0.394<small>±0.022</small></td><td>0.544<small>±0.029</small></td><td>0.359<small>±0.029</small></td><td>0.278<small>±0.019</small></td></tr>
-    <tr><td>Qwen3-VL-32B</td><td>0.432<small>±0.033</small></td><td>0.441<small>±0.042</small></td><td>0.382<small>±0.016</small></td><td>0.245<small>±0.012</small></td><td>0.064<small>±0.033</small></td><td>0.447<small>±0.010</small></td><td>0.225<small>±0.022</small></td></tr>
+    <tr class="base"><td>Majority-class</td><td>0.265</td><td>0.220</td><td>0.333</td><td>0.265</td><td>0.794</td><td>0.000</td><td>0.000</td></tr>
+    <tr><td>Gemini 3.1 Pro</td><td>0.617<small>±0.007</small></td><td>0.461<small>±0.026</small></td><td>0.402<small>±0.011</small></td><td>0.391<small>±0.013</small></td><td>0.710<small>±0.012</small></td><td>0.333<small>±0.018</small></td><td>0.129<small>±0.031</small></td></tr>
+    <tr><td>Gemini 3.8 Flash</td><td>0.587<small>±0.010</small></td><td>0.437<small>±0.016</small></td><td>0.383<small>±0.008</small></td><td>0.383<small>±0.009</small></td><td class="best">0.758<small>±0.009</small></td><td>0.218<small>±0.027</small></td><td>0.172<small>±0.013</small></td></tr>
+    <tr><td>GPT-6 Astra</td><td class="best">0.713</td><td class="best">0.539<small>±0.003</small></td><td class="best">0.524<small>±0.013</small></td><td class="best">0.513<small>±0.003</small></td><td>0.721<small>±0.023</small></td><td class="best">0.582<small>±0.098</small></td><td>0.235<small>±0.070</small></td></tr>
+    <tr><td>Claude Opus 5.5</td><td>0.676</td><td>0.610</td><td>0.483</td><td>0.492</td><td>0.790</td><td>0.434</td><td>0.250</td></tr>
+    <tr><td>Qwen3-VL-30B-A3B</td><td>0.511<small>±0.019</small></td><td>0.389<small>±0.010</small></td><td>0.404<small>±0.011</small></td><td>0.364<small>±0.007</small></td><td>0.501<small>±0.004</small></td><td>0.305<small>±0.019</small></td><td class="best">0.285<small>±0.012</small></td></tr>
+    <tr><td>Qwen3-VL-32B</td><td>0.337<small>±0.007</small></td><td>0.436<small>±0.012</small></td><td>0.400<small>±0.012</small></td><td>0.235<small>±0.010</small></td><td>0.092<small>±0.006</small></td><td>0.337<small>±0.007</small></td><td>0.274<small>±0.022</small></td></tr>
   </table>
   </div>
-  <p class="cap">Video-only input, mean ± std over 3 runs. Shaded = best excluding Claude (the agent used in data collection, which may be biased toward its own interface).</p>
+  <p class="cap">Video-only input, mean ± std over 3 runs. Shaded = best excluding Claude (the agent used in data collection, which may be biased toward its own interface). Claude was run once; GPT-6 Astra was evaluated on fewer instances (279 for 1a and 349 for 1b, vs. 692 and 691 for the other models).</p>
+
+  <h3>Does longer context help?</h3>
+  <p>On the 114 instances whose source and target AI nodes both fall in the last step of a session, we add the preceding 1–3 steps (Exp. 1c) or the entire workflow up to the target AI node (Exp. 1d). Longer context gives limited gains: macro-F1 changes stay below 0.07 for most video and graph settings, and none of the video improvements are statistically significant. Chat logs benefit most (Gemini 3.1 Pro +0.12 F1 with three preceding steps, p &lt; 0.01), but the gain does not persist with the full workflow, and longer context can hurt (Qwen-32B drops from 0.43 to 0.32 F1 with the full graph, p &lt; 0.01).</p>
+  <figure>
+    <img src="assets/fig4_context.png?v=3" alt="Change in macro-F1 as forecasting context grows">
+    <figcaption>Change in macro-F1 as forecasting context grows. The x-axis shows how many previous steps are included; "Full" starts at the beginning of the workflow. Filled markers: p &lt; .05.</figcaption>
+  </figure>
 
   <h3>RQ2 · Predicting collaboration satisfaction and output quality</h3>
   <div class="tblwrap">
   <table>
     <tr><th></th><th colspan="3">2a Collaboration</th><th colspan="3">2b Output quality</th></tr>
     <tr><th>Model</th><th>MAE ↓</th><th>Within-1 ↑</th><th>Spearman ρ ↑</th><th>MAE ↓</th><th>Within-1 ↑</th><th>Spearman ρ ↑</th></tr>
-    <tr class="base"><td>Mode baseline</td><td>0.679</td><td>0.847</td><td>–</td><td>0.725</td><td>0.836</td><td>–</td></tr>
-    <tr><td>Gemini 3.1 Pro</td><td class="best">0.697</td><td class="best">0.843</td><td>0.060</td><td class="best">0.767</td><td class="best">0.821</td><td>0.006</td></tr>
-    <tr><td>Gemini 3.8 Flash</td><td>0.798</td><td>0.816</td><td>0.037</td><td>0.817</td><td>0.808</td><td>−0.006</td></tr>
-    <tr><td>GPT-6 Astra</td><td>0.960</td><td>0.836</td><td class="best">0.332</td><td>0.938</td><td>0.779</td><td class="best">0.299</td></tr>
-    <tr><td>Qwen3-VL-30B-A3B</td><td>0.912</td><td>0.808</td><td>0.079</td><td>1.239</td><td>0.656</td><td>−0.015</td></tr>
-    <tr><td>Qwen3-VL-32B</td><td>1.266</td><td>0.609</td><td>0.082</td><td>1.341</td><td>0.563</td><td>0.101</td></tr>
+    <tr class="base"><td>Mode baseline</td><td>0.682</td><td>0.854</td><td>–</td><td>0.735</td><td>0.831</td><td>–</td></tr>
+    <tr><td>Gemini 3.1 Pro</td><td class="best">0.685</td><td class="best">0.850</td><td>0.078</td><td class="best">0.764</td><td class="best">0.821</td><td>0.046</td></tr>
+    <tr><td>Gemini 3.8 Flash</td><td>0.800</td><td>0.819</td><td>0.011</td><td>0.792</td><td>0.811</td><td>0.042</td></tr>
+    <tr><td>GPT-6 Astra</td><td>0.945</td><td>0.841</td><td class="best">0.379</td><td>0.912</td><td>0.805</td><td class="best">0.352</td></tr>
+    <tr><td>Qwen3-VL-30B-A3B</td><td>0.898</td><td>0.814</td><td>0.102</td><td>1.281</td><td>0.641</td><td>0.048</td></tr>
+    <tr><td>Qwen3-VL-32B</td><td>1.194</td><td>0.634</td><td>0.130</td><td>1.223</td><td>0.633</td><td>0.153</td></tr>
   </table>
   </div>
-  <p class="cap">Averaged over 3 runs. Because human ratings skew heavily toward 5, the trivial mode baseline beats every MLLM on MAE.</p>
+  <p class="cap">Averaged over 3 runs (GPT-6 Astra on 276 steps). Because human ratings skew heavily toward 5, the trivial mode baseline beats every MLLM on MAE.</p>
 
   <h3>Which modality helps?</h3>
-  <p>No single modality wins everywhere. Video gives the best recognition (Gemini 3.1 Pro, F1 = 0.76) and forecasting (GPT-6 Astra, F1 = 0.56). Chat alone hurts <span class="tag reject">REJECT</span> cases (−0.17 F1 vs. video), likely because rejections happen outside the chat. Human-curated workflow graphs help the non-agentic Qwen models most: for Qwen-32B they lift forecasting F1 from 0.24 to 0.42, and for output quality they raise Gemini Flash and Qwen-30B from ρ ≈ 0 to 0.26–0.30.</p>
+  <p>No single modality wins everywhere. Video alone yields the highest recognition performance (GPT-6 Astra, F1 = 0.71, Exp. 1a), while graphs, alone or combined with video or chat, tend to give the best forecasting (GPT-6 Astra, F1 = 0.52, Exp. 1b). Chat alone particularly hurts recognition of <span class="tag reject">REJECT</span> cases: relative to video, F1 changes by +0.07 for ADOPT, +0.01 for MODIFY, and −0.07 for REJECT, likely because chat does not capture how outputs are used outside the AI interface. Human-curated workflow graphs help the non-agentic Qwen models most: for Qwen-32B, adding the graph lifts forecasting F1 from 0.23 to 0.37, and for output quality it raises Gemini Flash and Qwen-30B from ρ ≈ 0.05 to 0.23–0.30.</p>
   <figure>
-    <img src="assets/fig5_modalities.png" alt="Seven input modality combinations">
+    <img src="assets/fig5_modalities.png?v=2" alt="Seven input modality combinations">
     <figcaption>Results for seven input-modality combinations (V = video, G = graph, C = chat log; "+" combines them).</figcaption>
   </figure>
   <figure>
-    <img src="assets/fig6_modality_effects.png" alt="How each modality helps">
-    <figcaption>(a) Video alone misses low ratings. (b) Chat alone misses rejections. (c) Graphs help most where video fails (r = −0.84).</figcaption>
+    <img src="assets/fig6_modality_effects.png?v=2" alt="How each modality helps">
+    <figcaption>(a) Video alone misses low ratings. (b) Chat alone misses rejections. (c) Graphs help most where video fails (r = −0.68).</figcaption>
   </figure>
 </section>
 
 <section id="failures">
   <h2>Failure Cases</h2>
-  <p><b>Models favor particular labels.</b> Gemini 3.1 Pro and Flash consistently over-predict <span class="tag adopt">ADOPT</span>: with video, Gemini Flash predicts it for 79.2% of examples against a 62.0% ground-truth rate. Qwen3-VL-32B instead predicts <span class="tag modify">MODIFY</span> for 91.5% of cases (28.1% in the ground truth).</p>
+  <p><b>Models favor particular labels.</b> Gemini 3.1 Pro and Flash over-predict <span class="tag adopt">ADOPT</span>: with video, Gemini Flash predicts it for 83.8% of examples against a 65.8% ground-truth rate. Qwen3-VL-32B instead predicts <span class="tag modify">MODIFY</span> for 87.3% of cases (19.1% in the ground truth). These biases largely persist with graph and chat inputs (e.g., Flash predicts <span class="tag adopt">ADOPT</span> for 82.3% and 74.0%, and Qwen3-VL-32B predicts <span class="tag modify">MODIFY</span> for 67.7% and 62.0%).</p>
   <figure>
     <div class="grid2">
-      <div><img src="assets/fig7a_reject.png" alt="True-reject cases"></div>
-      <div><img src="assets/fig7b_modify.png" alt="True-modify cases"></div>
+      <div><img src="assets/fig7b_modify.png?v=2" alt="True-modify cases"></div>
+      <div><img src="assets/fig7a_reject.png?v=2" alt="True-reject cases"></div>
     </div>
-    <figcaption>Prediction distributions for true REJECT (left) and true MODIFY (right) cases in adoption forecasting.</figcaption>
+    <figcaption>Distributions of model-generated labels for true MODIFY (left) and true REJECT (right) cases in AI adoption forecasting, pooled over video, graph, and chat inputs.</figcaption>
   </figure>
-  <p><b>Models give near-constant ratings.</b> With video, Gemini 3.1 Pro predicts 4.83 for a true rating of 1 and 4.95 for a true 5 in Task 2a. Adding the graph widens the gap between true ratings of 1 and 5 to 1.96 and 2.49 for Tasks 2a and 2b; GPT-6 and Claude already separate low and high ratings with video (gaps of 0.74–1.23).</p>
+  <p><b>Models give near-constant ratings.</b> With video, Gemini 3.1 Pro predicts 4.83 for a true rating of 1 and 4.95 for a true 5 in Task 2a. Adding the graph widens the gap between true ratings of 1 and 5 to 1.95 and 2.45 for Tasks 2a and 2b; GPT-6 and Claude already separate low and high ratings with video (gaps of 0.54–1.34).</p>
+
+  <figure>
+    <div class="grid2">
+      <div><img src="assets/fig8a_calibration.png?v=3" alt="Mean predicted vs. human collaboration rating"></div>
+      <div><img src="assets/fig8b_calibration.png?v=3" alt="Mean predicted vs. human output-quality rating"></div>
+    </div>
+    <figcaption>Mean predicted rating vs. human rating for collaboration (Exp. 2a, left) and output quality (Exp. 2b, right). The dashed diagonal is a perfect prediction.</figcaption>
+  </figure>
+
+  <!-- bias-explorer:start -->
+  <h3 id="bias-explorer">Explore the biases</h3>
+  <p>The charts below use the latest benchmark runs. Switch the input to see how each model's behaviour changes with what it can see.</p>
+
+  <div class="viz" id="viz-labels">
+    <h4>What does each model predict, compared with the truth?</h4>
+    <p class="sub">Share of forecasts (Task 1b) that are ADOPT / MODIFY / REJECT, over all cases. The top bar is the ground truth.</p>
+    <div class="seg" data-ctl="labels"></div>
+    <div class="vz-legend"><span><i style="background:#E8B4AE"></i>Adopt</span><span><i style="background:#F2D8A4"></i>Modify</span><span><i style="background:#B8D9C0"></i>Reject</span></div>
+    <div id="labels-svg"></div>
+    <p class="note" id="labels-note"></p>
+  </div>
+
+  <div class="viz" id="viz-ratings">
+    <h4>Do the predicted ratings follow the human ratings?</h4>
+    <p class="sub">Mean rating the model predicts at each human rating. A model that tracks people would follow the dashed diagonal; a flat line means it predicts the same rating regardless of the truth.</p>
+    <div class="seg" data-ctl="exp"></div><div class="seg" data-ctl="rinput"></div>
+    <div class="vz-flex">
+      <div id="ratings-svg"></div>
+      <div id="ratings-tbl"></div>
+    </div>
+    <p class="note" id="ratings-note"></p>
+  </div>
+  <!-- bias-explorer:end -->
+
   <div class="hl">These systematic biases raise a deeper question: are MLLMs actually grounding their predictions in the observed workflow? Repeating similar labels and ratings across different inputs suggests predictions may be driven by model-specific priors rather than the workflow itself.</div>
 </section>
 
@@ -359,5 +420,87 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
 <footer>
   <div class="wrap">© 2026 <a href="https://minnesotanlp.github.io/">Minnesota NLP</a> · University of Minnesota</div>
 </footer>
+
+<script src="assets/bias_data.js"></script>
+<script>
+(function(){
+  var D=window.BIAS_DATA; if(!D) return;
+  var COL={adopt:"#E8B4AE",modify:"#F2D8A4",reject:"#B8D9C0"};
+  var MC={"Gemini 3.1 Pro":"#2E5D96","Gemini 3.8 Flash":"#7FA8D8","GPT-6 Astra":"#2E8B57","Claude Opus 5.5":"#C1440E","Qwen3-VL-30B":"#7A5FC4","Qwen3-VL-32B":"#B58BE0"};
+  var st={labels:"video",exp:"2a",rinput:"video"};
+  var NAMES={video:"Video",graph:"Graph",chat:"Chat",all:"All inputs"};
+  function f1(x){return x.toFixed(1)}
+  function seg(el,opts,key,cb){
+    el.innerHTML="";
+    opts.forEach(function(o){var b=document.createElement("button");b.textContent=o[1];b.className=st[key]===o[0]?"on":"";
+      b.onclick=function(){st[key]=o[0];cb();};el.appendChild(b);});
+  }
+  function labels(){
+    var d=D.labels[st.labels], rows=[["Ground truth",d.truth,true]];
+    Object.keys(d.models).forEach(function(m){rows.push([m,d.models[m],false]);});
+    var W=860,rowH=38,left=150,right=150,top=26,barW=W-left-right,H=top+rows.length*rowH+8,svg="";
+    svg+='<text x="'+(W-right+12)+'" y="14" font-size="12" fill="#5b6475">Adopt</text><text x="'+(W-right+68)+'" y="14" font-size="12" fill="#5b6475">Modify</text>';
+    svg+='<text x="'+(W-right+12)+'" y="26" font-size="11" fill="#8a91a0">vs. truth</text><text x="'+(W-right+68)+'" y="26" font-size="11" fill="#8a91a0">vs. truth</text>';
+    rows.forEach(function(r,i){
+      var y=top+8+i*rowH,x=left,vals=[["adopt",r[1].adopt],["modify",r[1].modify],["reject",r[1].reject]];
+      svg+='<text x="'+(left-10)+'" y="'+(y+14)+'" text-anchor="end" font-size="14" '+(r[2]?'font-weight="700"':'')+' fill="#1d2433">'+r[0]+'</text>';
+      vals.forEach(function(v){
+        var w=barW*v[1]/100;
+        svg+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="24" fill="'+COL[v[0]]+'" stroke="'+(r[2]?'#1d2433':'#8a8a8a')+'" stroke-width="'+(r[2]?1.6:.6)+'"/>';
+        if(v[1]>=6) svg+='<text x="'+(x+w/2)+'" y="'+(y+17)+'" text-anchor="middle" font-size="13" fill="#1d2433">'+Math.round(v[1])+'</text>';
+        x+=w;
+      });
+      if(!r[2]){
+        var da=r[1].adopt-d.truth.adopt, dm=r[1].modify-d.truth.modify;
+        svg+='<text x="'+(W-right+12)+'" y="'+(y+17)+'" font-size="13.5" font-weight="600" fill="'+(Math.abs(da)<5?'#5b6475':da>0?'#c43a52':'#2f80c9')+'">'+(da>0?'+':'')+f1(da)+'</text>';
+        svg+='<text x="'+(W-right+68)+'" y="'+(y+17)+'" font-size="13.5" font-weight="600" fill="'+(Math.abs(dm)<5?'#5b6475':dm>0?'#c43a52':'#2f80c9')+'">'+(dm>0?'+':'')+f1(dm)+'</text>';
+      }
+    });
+    document.getElementById("labels-svg").innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Predicted label shares by model">'+svg+'</svg>';
+    var ms=d.models, best=null, qm=null;
+    Object.keys(ms).forEach(function(m){
+      var da=ms[m].adopt-d.truth.adopt, dm=ms[m].modify-d.truth.modify;
+      if(best===null||da>best[1]) best=[m,da];
+      if(qm===null||dm>qm[1]) qm=[m,dm];
+    });
+    var other=st.labels==="all"?" (pooled over video, graph and chat; "+d.truth.n.toLocaleString()+" forecasts)":" ("+d.truth.n.toLocaleString()+" forecasts per model)";
+    document.getElementById("labels-note").innerHTML="<b>"+NAMES[st.labels]+":</b> the truth is "+f1(d.truth.adopt)+"% adopt. "
+      +best[0]+" predicts adopt "+f1(ms[best[0]].adopt)+"% of the time ("+(best[1]>0?"+":"")+f1(best[1])+" points), and "+qm[0]+" predicts modify "+f1(ms[qm[0]].modify)+"% (truth "+f1(d.truth.modify)+"%)."+other;
+  }
+  function ratings(){
+    var d=D.ratings[st.exp][st.rinput], names=Object.keys(d);
+    var W=400,H=330,L=44,R=14,T=14,B=44,pw=W-L-R,ph=H-T-B;
+    function X(r){return L+(r-1)/4*pw} function Y(v){return T+(5.4-v)/4.4*ph}
+    var svg="";
+    [1,2,3,4,5].forEach(function(v){svg+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#e8e8e8"/><text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="12" fill="#5b6475">'+v+'</text>';
+      svg+='<text x="'+X(v)+'" y="'+(H-B+18)+'" text-anchor="middle" font-size="12" fill="#5b6475">'+v+'</text>';});
+    svg+='<line x1="'+X(1)+'" y1="'+Y(1)+'" x2="'+X(5)+'" y2="'+Y(5)+'" stroke="#9a9a9a" stroke-dasharray="5 4"/>';
+    svg+='<rect x="'+L+'" y="'+T+'" width="'+pw+'" height="'+ph+'" fill="none" stroke="#1d2433" stroke-width="1.2"/>';
+    svg+='<text x="'+(L+pw/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="13" fill="#1d2433">Human rating</text>';
+    svg+='<text transform="rotate(-90)" x="'+(-(T+ph/2))+'" y="13" text-anchor="middle" font-size="13" fill="#1d2433">Mean predicted rating</text>';
+    names.forEach(function(m){
+      var c=d[m].curve, pts=[];
+      c.forEach(function(v,i){if(v!=null) pts.push([X(i+1),Y(v)]);});
+      svg+='<polyline fill="none" stroke="'+MC[m]+'" stroke-width="2.4" points="'+pts.map(function(p){return p[0]+","+p[1]}).join(" ")+'"/>';
+      pts.forEach(function(p){svg+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3.6" fill="'+MC[m]+'" stroke="#fff" stroke-width="1"/>';});
+    });
+    document.getElementById("ratings-svg").innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Predicted vs human rating">'+svg+'</svg>';
+    var t='<table><tr><th style="text-align:left">Model</th><th>Pred. @1</th><th>Pred. @5</th><th>Gap</th></tr>', rows=[];
+    names.forEach(function(m){var c=d[m].curve,gap=c[4]-c[0];rows.push([m,c[0],c[4],gap]);t+='<tr><td style="text-align:left"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+MC[m]+';margin-right:6px"></span>'+m+'</td><td>'+c[0].toFixed(2)+'</td><td>'+c[4].toFixed(2)+'</td><td class="'+(gap<0.3?'neg':'pos')+'">'+(gap>0?'+':'')+gap.toFixed(2)+'</td></tr>';});
+    t+="</table>";
+    document.getElementById("ratings-tbl").innerHTML=t;
+    var flat=rows.filter(function(r){return r[3]<0.3}).map(function(r){return r[0]});
+    document.getElementById("ratings-note").innerHTML="<b>Gap</b> = prediction at human rating 5 minus at human rating 1 (a model that tracks people would show a gap near 4). "
+      +(flat.length?"With "+NAMES[st.rinput].toLowerCase()+" input, "+flat.join(", ")+(flat.length>1?" give":" gives")+" almost the same rating for a 1 as for a 5 (gap &lt; 0.3).":"With "+NAMES[st.rinput].toLowerCase()+" input, every model separates low from high ratings by at least 0.3.");
+  }
+  function draw(){
+    seg(document.querySelector('[data-ctl="labels"]'),[["video","Video"],["graph","Graph"],["chat","Chat"],["all","All inputs"]],"labels",draw);
+    seg(document.querySelector('[data-ctl="exp"]'),[["2a","2a Collaboration"],["2b","2b Output quality"]],"exp",draw);
+    seg(document.querySelector('[data-ctl="rinput"]'),[["video","Video"],["graph","Graph"],["chat","Chat"]],"rinput",draw);
+    labels();ratings();
+  }
+  draw();
+})();
+</script>
 </body>
 </html>
