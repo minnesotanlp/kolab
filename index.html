@@ -73,6 +73,20 @@ figure img{max-width:100%;height:auto;border-radius:10px;background:#fff;padding
 .release figure{margin:0;flex:none}
 .release ul{margin:0}
 @media(max-width:760px){.release{flex-direction:column}.comps{zoom:.6}}
+.reels{margin:34px 0 6px}
+.reels-top{margin:28px 0 0}
+.reels-h{margin:0 0 4px}
+.reel2{margin-top:14px}
+.reel-label{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.reel{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.reel-track{display:flex;gap:14px;width:max-content;animation:reel-left 70s linear infinite}
+.reel-track.rev{animation-name:reel-right}
+.reel:hover .reel-track{animation-play-state:paused}
+.rc{margin:0;flex:none;width:300px}
+.rc img{width:100%;height:170px;object-fit:cover;object-position:top left;border-radius:10px;border:1px solid var(--line);display:block;background:#fff;padding:0}
+.rc figcaption{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px;color:var(--muted);margin:5px 2px 0;text-align:left}
+@keyframes reel-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes reel-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .grid3,.grid2{display:grid;gap:12px;align-items:end}
 .grid3{grid-template-columns:repeat(3,1fr)}
 .grid2{grid-template-columns:repeat(2,1fr)}
@@ -80,10 +94,10 @@ figure img{max-width:100%;height:auto;border-radius:10px;background:#fff;padding
 .grid3 span{display:block;font-size:14px;color:var(--muted);margin-top:6px}
 @media(max-width:700px){.grid3,.grid2{grid-template-columns:1fr}}
 figcaption{color:var(--muted);font-size:15px;margin-top:8px;text-align:left}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:26px 0}
-.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
-.stat b{display:block;font-size:30px;font-weight:800;color:var(--accent);line-height:1.1}
-.stat span{font-size:14px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:22px 0 8px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 6px;text-align:center}
+.stat b{display:block;font-size:clamp(17px,3.2vw,28px);font-weight:800;color:var(--accent);line-height:1.1;white-space:nowrap}
+.stat span{font-size:clamp(10px,1.5vw,13px);color:var(--muted);line-height:1.25;display:block;margin-top:3px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:18px 0}
 .card{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff}
 .criteria{list-style:disc;padding-left:26px;margin:12px 0 18px}
@@ -167,11 +181,23 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
   </div>
 </header>
 
-<nav class="top"><div class="wrap wide">
-  <a href="#abstract">Abstract</a><a href="#dataset">Dataset</a><a href="#annotation">Annotations</a><a href="#dynamics">Collaboration dynamics</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#failures">Failure cases</a><a href="#bibtex">BibTeX</a>
-</div></nav>
-
 <main class="wrap">
+
+
+
+  <div class="reels reels-top">
+    <div class="reel"><div class="reel-track"><figure class="rc"><img src="assets/carousel/p1.jpg" alt="Screen recording frame, Film editor" loading="lazy"><figcaption>Film editor</figcaption></figure><figure class="rc"><img src="assets/carousel/p6.jpg" alt="Screen recording frame, Attorney" loading="lazy"><figcaption>Attorney</figcaption></figure><figure class="rc"><img src="assets/carousel/p17.jpg" alt="Screen recording frame, Professor" loading="lazy"><figcaption>Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p18.jpg" alt="Screen recording frame, Metallurgical engineer" loading="lazy"><figcaption>Metallurgical engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p20.jpg" alt="Screen recording frame, Photographer" loading="lazy"><figcaption>Photographer</figcaption></figure><figure class="rc"><img src="assets/carousel/p27.jpg" alt="Screen recording frame, GIS Specialist" loading="lazy"><figcaption>GIS Specialist</figcaption></figure><figure class="rc"><img src="assets/carousel/p36.jpg" alt="Screen recording frame, 3D animator" loading="lazy"><figcaption>3D animator</figcaption></figure><figure class="rc"><img src="assets/carousel/p49.jpg" alt="Screen recording frame, Medical AI Researcher and Assistant Professor" loading="lazy"><figcaption>Medical AI Researcher and Assistant Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p2.jpg" alt="Screen recording frame, Aerospace engineer" loading="lazy"><figcaption>Aerospace engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p21.jpg" alt="Screen recording frame, Graphic designer" loading="lazy"><figcaption>Graphic designer</figcaption></figure><figure class="rc"><img src="assets/carousel/p1.jpg" alt="Screen recording frame, Film editor" loading="lazy"><figcaption>Film editor</figcaption></figure><figure class="rc"><img src="assets/carousel/p6.jpg" alt="Screen recording frame, Attorney" loading="lazy"><figcaption>Attorney</figcaption></figure><figure class="rc"><img src="assets/carousel/p17.jpg" alt="Screen recording frame, Professor" loading="lazy"><figcaption>Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p18.jpg" alt="Screen recording frame, Metallurgical engineer" loading="lazy"><figcaption>Metallurgical engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p20.jpg" alt="Screen recording frame, Photographer" loading="lazy"><figcaption>Photographer</figcaption></figure><figure class="rc"><img src="assets/carousel/p27.jpg" alt="Screen recording frame, GIS Specialist" loading="lazy"><figcaption>GIS Specialist</figcaption></figure><figure class="rc"><img src="assets/carousel/p36.jpg" alt="Screen recording frame, 3D animator" loading="lazy"><figcaption>3D animator</figcaption></figure><figure class="rc"><img src="assets/carousel/p49.jpg" alt="Screen recording frame, Medical AI Researcher and Assistant Professor" loading="lazy"><figcaption>Medical AI Researcher and Assistant Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p2.jpg" alt="Screen recording frame, Aerospace engineer" loading="lazy"><figcaption>Aerospace engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p21.jpg" alt="Screen recording frame, Graphic designer" loading="lazy"><figcaption>Graphic designer</figcaption></figure></div></div>
+    <div class="reel reel2"><div class="reel-track rev"><figure class="rc"><img src="assets/carousel/p27.jpg" alt="Screen recording frame, GIS Specialist" loading="lazy"><figcaption>GIS Specialist</figcaption></figure><figure class="rc"><img src="assets/carousel/p36.jpg" alt="Screen recording frame, 3D animator" loading="lazy"><figcaption>3D animator</figcaption></figure><figure class="rc"><img src="assets/carousel/p49.jpg" alt="Screen recording frame, Medical AI Researcher and Assistant Professor" loading="lazy"><figcaption>Medical AI Researcher and Assistant Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p2.jpg" alt="Screen recording frame, Aerospace engineer" loading="lazy"><figcaption>Aerospace engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p21.jpg" alt="Screen recording frame, Graphic designer" loading="lazy"><figcaption>Graphic designer</figcaption></figure><figure class="rc"><img src="assets/carousel/p1.jpg" alt="Screen recording frame, Film editor" loading="lazy"><figcaption>Film editor</figcaption></figure><figure class="rc"><img src="assets/carousel/p6.jpg" alt="Screen recording frame, Attorney" loading="lazy"><figcaption>Attorney</figcaption></figure><figure class="rc"><img src="assets/carousel/p17.jpg" alt="Screen recording frame, Professor" loading="lazy"><figcaption>Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p18.jpg" alt="Screen recording frame, Metallurgical engineer" loading="lazy"><figcaption>Metallurgical engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p20.jpg" alt="Screen recording frame, Photographer" loading="lazy"><figcaption>Photographer</figcaption></figure><figure class="rc"><img src="assets/carousel/p27.jpg" alt="Screen recording frame, GIS Specialist" loading="lazy"><figcaption>GIS Specialist</figcaption></figure><figure class="rc"><img src="assets/carousel/p36.jpg" alt="Screen recording frame, 3D animator" loading="lazy"><figcaption>3D animator</figcaption></figure><figure class="rc"><img src="assets/carousel/p49.jpg" alt="Screen recording frame, Medical AI Researcher and Assistant Professor" loading="lazy"><figcaption>Medical AI Researcher and Assistant Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p2.jpg" alt="Screen recording frame, Aerospace engineer" loading="lazy"><figcaption>Aerospace engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p21.jpg" alt="Screen recording frame, Graphic designer" loading="lazy"><figcaption>Graphic designer</figcaption></figure><figure class="rc"><img src="assets/carousel/p1.jpg" alt="Screen recording frame, Film editor" loading="lazy"><figcaption>Film editor</figcaption></figure><figure class="rc"><img src="assets/carousel/p6.jpg" alt="Screen recording frame, Attorney" loading="lazy"><figcaption>Attorney</figcaption></figure><figure class="rc"><img src="assets/carousel/p17.jpg" alt="Screen recording frame, Professor" loading="lazy"><figcaption>Professor</figcaption></figure><figure class="rc"><img src="assets/carousel/p18.jpg" alt="Screen recording frame, Metallurgical engineer" loading="lazy"><figcaption>Metallurgical engineer</figcaption></figure><figure class="rc"><img src="assets/carousel/p20.jpg" alt="Screen recording frame, Photographer" loading="lazy"><figcaption>Photographer</figcaption></figure></div></div>
+  </div>
+
+<div class="stats">
+    <div class="stat"><b>115+ hrs</b><span>screen-recorded video</span></div>
+    <div class="stat"><b>50</b><span>professionals</span></div>
+    <div class="stat"><b>40</b><span>occupations</span></div>
+    <div class="stat"><b>100</b><span>videos</span></div>
+    <div class="stat"><b>508</b><span>workflow steps</span></div>
+    <div class="stat"><b>90+</b><span>software applications</span></div>
+  </div>
 
 <section id="abstract">
   <h2>Abstract</h2>
@@ -186,15 +212,9 @@ nav.top a{color:var(--muted)} nav.top a:hover{color:var(--accent);text-decoratio
     <figcaption><b>Overview.</b> <span class="kolab">K<span class="olab">OLAB</span></span> records how professionals (<span class="human">human actions</span>) and agents (<span class="ai">AI actions</span>) jointly solve long-horizon problems, derives metrics to understand collaboration dynamics, and benchmarks whether frontier multimodal LLMs understand this collaboration.</figcaption>
   </figure>
 
-  <div class="stats">
-    <div class="stat"><b>115+ hrs</b><span>screen-recorded video</span></div>
-    <div class="stat"><b>50</b><span>professionals</span></div>
-    <div class="stat"><b>40</b><span>occupations</span></div>
-    <div class="stat"><b>100</b><span>workflow sessions</span></div>
-    <div class="stat"><b>508</b><span>workflow steps</span></div>
-    <div class="stat"><b>90+</b><span>software applications</span></div>
-  </div>
-</section>
+  
+
+  </section>
 
 <section id="dataset">
   <h2>The <span class="kolab">K<span class="olab">OLAB</span></span> Dataset</h2>
