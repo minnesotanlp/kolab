@@ -1,0 +1,8 @@
+# Extra packages for the local Qwen3-VL runs (inference/run_qwen_setting.py, run_experiment2a.py, run_experiment2b.py).
+# Not needed for --dry-run, nor for the Gemini / GPT runs, nor for run_qwen32b_remote.py (that one only needs `openai`).
+-r requirements.txt
+torch          # CUDA build matching your driver
+torchvision
+transformers>=4.57   # first release with Qwen3-VL; needs Python 3.9+
+accelerate           # device_map="auto" shards the model across GPUs
+qwen-vl-utils

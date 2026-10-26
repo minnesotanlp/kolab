@@ -1,0 +1,6 @@
+# Core: data prep, prompts, API models (Gemini / GPT through the OpenAI-compatible gateway), evaluation.
+# Also needs ffmpeg and ffprobe on the PATH (not pip packages).
+tqdm
+scikit-learn
+python-docx
+openai
